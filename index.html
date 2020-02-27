@@ -11,14 +11,6 @@
   </div>
 </body>
 <script>
-  function install() {
-    // When you want to trigger prompt:
-    this.deferredPrompt.prompt();
-    this.deferredPrompt.userChoice.then(choice => {
-      console.log(choice);
-    });
-    this.deferredPrompt = null;
-  }
   window.addEventListener('beforeinstallprompt', e => {
     console.log('beforeinstallprompt Event fired');
     e.preventDefault();
@@ -26,6 +18,17 @@
     this.deferredPrompt = e;
     return false;
   });
+
+  function install() {
+    // When you want to trigger prompt:
+    if (this.deferredPrompt) {
+      this.deferredPrompt.prompt();
+      this.deferredPrompt.userChoice.then(choice => {
+        console.log(choice);
+      });
+      this.deferredPrompt = null;
+    }
+  }
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('service-worker.js').then(function (registration) {
