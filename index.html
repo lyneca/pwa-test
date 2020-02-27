@@ -15,20 +15,21 @@
     console.log('beforeinstallprompt Event fired');
     e.preventDefault();
     // Stash the event so it can be triggered later.
-    this.deferredPrompt = e;
+    window.deferredPrompt = e;
     return false;
   });
 
   function install() {
     // When you want to trigger prompt:
-    if (this.deferredPrompt) {
-      this.deferredPrompt.prompt();
-      this.deferredPrompt.userChoice.then(choice => {
+    if (window.deferredPrompt) {
+      window.deferredPrompt.prompt();
+      window.deferredPrompt.userChoice.then(choice => {
         console.log(choice);
       });
-      this.deferredPrompt = null;
+      window.deferredPrompt = null;
     }
   }
+  
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('service-worker.js').then(function (registration) {
